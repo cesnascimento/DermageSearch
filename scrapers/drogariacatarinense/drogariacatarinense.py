@@ -23,14 +23,14 @@ def buscar_produtos(lista_items):
     return lista_produtos
 
 def informacoes_produtos():
-    lista_produtos = buscar_produtos(requisicao_drogariacatarinense())
+    info_produtos = buscar_produtos(requisicao_drogariacatarinense())
     DICIO['produtos'], DICIO['precos'], DICIO['lojas'] = [], [], []
     DICIO['lojas'].append({'id': 2, 'nome': 'Drogaria Catarinense', 'site': headers['authority']})
-    for num,produto in enumerate(lista_produtos, 1):
-        name, ean = produto[0]['name'], produto[0]['ean']
-        price = locale.currency(produto[0]['sellers'][0]['commertialOffer']['Price'])
-        DICIO['produtos'].append({'nome': name, 'ean': ean})
-        DICIO['precos'].append({'id': num,'ean_id': ean, 'loja_id': 2, 'preco': price})
+    for num,produto in enumerate(info_produtos, 1):
+        nome, ean = produto[0]['name'], produto[0]['ean']
+        preco = locale.currency(produto[0]['sellers'][0]['commertialOffer']['Price'])
+        DICIO['produtos'].append({'nome': nome, 'ean': ean})
+        DICIO['precos'].append({'id': num,'ean_id': ean, 'loja_id': 2, 'preco': preco})
     return DICIO
 
 def start():
