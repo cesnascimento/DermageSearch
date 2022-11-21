@@ -56,50 +56,56 @@ function ListaProdutos() {
                             onChange={e => { setSearchTerm(e.target.value) }}>
                         </Input>
                     </InputGroup>
-                    <Center marginLeft={50}>
-                        {ProdutoSelecionado && (
-                            <Center>
-                                <TableContainer marginTop={5}>
-                                    <Table variant='simple'>
-                                        <TableCaption>Dermage Products Search</TableCaption>
-                                        <Thead>
-                                            <Tr>
-                                                <Th>Código Ean</Th>
-                                                <Th>Nome</Th>
-                                                <Th isNumeric>Preço</Th>
-                                                <Th>Site</Th>
-                                            </Tr>
-                                        </Thead>
-                                        {dadosDoProduto.map(produto => (
-                                            <Tbody>
-                                                <Tr key={produto.id}>
-                                                    <Td>{produto.ean_id}</Td>
-                                                    <Td>{ProdutoSelecionado.nome}</Td>
-                                                    <Td>{produto.preco}</Td>
-                                                    <Td><Link href={procurarLoja(produto.loja_id).site} isExternal>{procurarLoja(produto.loja_id).nome}</Link></Td>
-                                                </Tr>
-                                            </Tbody>
-                                        ))}
-                                    </Table>
-                                </TableContainer>
-                            </Center>
-                        )}
-                        <List marginTop={5}>
+                    <TableContainer>
+                        <Table variant='unstyled'>
+                            <TableCaption>Dermage Products Search</TableCaption>
+                            <Thead>
+                                <Tr>
+                                    <Td><Text as='b'>Produto</Text></Td>
+                                    <Td></Td>
+                                </Tr>
+                            </Thead>
                             {produtos.filter(data => {
-                                if (searchTerm == "") {
-                                    return ""
-                                } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
+                                if (searchTerm == '') {
+                                    return ''
+                                } else if (data.nome.toLowerCase().includes(searchTerm.toLocaleLowerCase())) {
                                     return data
                                 }
                             }).map(produto => (
-                                <ListItem>
-                                    {produto.nome}
-                                    <Button colorScheme='blue' size='xs' margin={2} onClick={() => mostrarDadosDoProduto(produto)}>Ver preço</Button>
-                                </ListItem>
-                            ))}
-                        </List>
+                                <Tbody>
+                                    <Tr>
 
-                    </Center>
+                                        <Td>{produto.nome}</Td>
+                                        <Td><Button colorScheme='blue' size='xs' margin={2} onClick={() => mostrarDadosDoProduto(produto)}>Ver preço</Button></Td>
+                                    </Tr>
+                                    {ProdutoSelecionado && ProdutoSelecionado.ean == produto.ean && (
+                                        <Center marginLeft={20}>
+                                            <Table variant='unstyled' size='sm'>
+                                                <TableCaption>Dermage Products Search</TableCaption>
+                                                <Thead>
+                                                    <Tr>
+                                                        <Th>Código Ean</Th>
+                                                        <Th isNumeric>Preço</Th>
+                                                        <Th>Site</Th>
+                                                    </Tr>
+                                                </Thead>
+                                                {dadosDoProduto.map(produto => (
+                                                    <Tbody>
+                                                        <Tr key={produto.id}>
+                                                            <Td>{produto.ean_id}</Td>
+                                                            <Td>{produto.preco}</Td>
+                                                            <Td><Link href={procurarLoja(produto.loja_id).site} isExternal>{procurarLoja(produto.loja_id).nome}</Link></Td>
+                                                        </Tr>
+                                                    </Tbody>
+                                                ))}
+                                            </Table>
+                                        </Center>
+                                    )}
+                                </Tbody>
+                            ))
+                            }
+                        </Table>
+                    </TableContainer>
                 </Box>
             </Center>
         </>
