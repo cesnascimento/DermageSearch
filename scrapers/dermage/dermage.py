@@ -12,23 +12,27 @@ locale.setlocale(locale.LC_MONETARY, '')
 categorias = ['rosto', 'corpo', 'cabelo', 'fotoprotecao', 'maquiagem']
 
 
-def buscar_skus(categoria, num_pagina):
-    ids_skus = list()
-    dermage = dermage_session.get(**mount_payload(categoria, num_pagina))
-    soup = BeautifulSoup(dermage.text, 'html.parser')
-    skus = soup.find_all('span', 'skuProd')
-    for sku in skus:
-        ids_skus.append(sku['data-id'])
-    return ids_skus
+def buscar_skus(categoria, num_paginas):
+    codigos_skus = list()
+    for num_pagina in num_paginas:
+        dermage = dermage_session.get(**mount_payload(categoria, num_pagina))
+        soup = BeautifulSoup(dermage.text, 'html.parser')
+        buscar_skus = [x['data-id'] for x in soup.find_all('span', 'skuProd')]
+        for sku in buscar_skus:
+           codigos_skus.append(sku)
+    return codigos_skus
 
 
 def listar_skus():
     for categoria in categorias:
         if categoria == 'rosto':
-            for num_pagina in range(1, 5):
+            num_paginas = [x for x in range(1,5)]
+            info = buscar_skus(categoria, num_paginas)
+            print(info)
+            '''for num_pagina in range(1, 5):
                 for i in buscar_skus(categoria, num_pagina):
                     print(i)
-    '''todos_skus = list()
+    todos_skus = list()
     for categoria in categorias:
         if categoria == 'rosto':
             for num_pagina in range(1, 5):
