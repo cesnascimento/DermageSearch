@@ -1,4 +1,4 @@
-headers = lambda categ: {
+def headers(categ): return {
   'authority': 'www.dermage.com.br',
   'accept': '*/*',
   'accept-language': 'pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
@@ -15,7 +15,8 @@ headers = lambda categ: {
   'x-requested-with': 'XMLHttpRequest',
 }
 
-params = lambda page_number: {
+
+def params(page_number): return {
   'PS': '32',
   'sl': 'b7a2f291-c412-4676-ae81-82bfd7e36c33',
   'cc': '4',
@@ -23,8 +24,18 @@ params = lambda page_number: {
   'PageNumber': f'{page_number}',
 }
 
-mount_payload = lambda categ, page_number: {
+
+def mount_payload(categ, page_number): return {
   'url': f'https://www.dermage.com.br/{categ}',
-  'params':params(page_number),
-  'headers':headers(categ)
+  'params': params(page_number),
+  'headers': headers(categ)
+}
+
+
+paginas_categorias = {
+  'rosto': 5,
+  'corpo': 3,
+  'cabelo': 2,
+  'fotoprotecao': 2,
+  'maquiagem': 3
 }

@@ -2,66 +2,72 @@ import requests
 import re
 import json
 import locale
+from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
-from headers_dermage import mount_payload
+from headers_dermage import mount_payload, paginas_categorias
 
 
 dermage_session = requests.Session()
 DICIO = {}
 locale.setlocale(locale.LC_MONETARY, '')
-categorias = ['rosto', 'corpo', 'cabelo', 'fotoprotecao', 'maquiagem']
 
 
-def buscar_skus(categoria, num_paginas):
+def requisicao_dermage(categoria, num_paginas):
     codigos_skus = list()
     for num_pagina in num_paginas:
         dermage = dermage_session.get(**mount_payload(categoria, num_pagina))
         soup = BeautifulSoup(dermage.text, 'html.parser')
-        buscar_skus = [x['data-id'] for x in soup.find_all('span', 'skuProd')]
+        buscar_skus = [x['data-id']
+                       for x in soup.find_all('span', 'skuProd')]
         for sku in buscar_skus:
-           codigos_skus.append(sku)
+            codigos_skus.append(sku)
     return codigos_skus
 
 
-def listar_skus():
-    for categoria in categorias:
-        if categoria == 'rosto':
-            num_paginas = [x for x in range(1,5)]
-            info = buscar_skus(categoria, num_paginas)
-            print(info)
-            '''for num_pagina in range(1, 5):
-                for i in buscar_skus(categoria, num_pagina):
-                    print(i)
-    todos_skus = list()
-    for categoria in categorias:
-        if categoria == 'rosto':
-            for num_pagina in range(1, 5):
-                todos_skus.append(buscar_skus(categoria, num_pagina))
-        elif categoria == 'corpo':
-            for num_pagina in range(1, 3):
-                todos_skus.append(buscar_skus(categoria, num_pagina))
-        elif categoria == 'cabelo':
-            for num_pagina in range(1, 2):
-                todos_skus.append(buscar_skus(categoria, num_pagina))
-        elif categoria == 'fotoprotecao':
-            for num_pagina in range(1, 2):
-                todos_skus.append(buscar_skus(categoria, num_pagina))
-        else:
-            for num_pagina in range(1, 3):
-                todos_skus.append(buscar_skus(categoria, num_pagina))
-    return todos_skus'''
+def paginas_in_categorias(nome_categoria):
+    if nome_categoria in paginas_categorias.keys():
+        num_paginas = [num for num in range(
+            1, paginas_categorias[nome_categoria])]
+        return num_paginas
 
 
-def informacoes_produtos(todos_skus):
-    pass
-    '''for skus in todos_skus:
-        dermage_apis = dermage_session.get(f'https://www.dermage.com.br/produto/sku/{skus}')
-        print(dermage_apis)
-'''
+def listar_codigos_skus():
+    codigos_skus = list()
+    for categoria in paginas_categorias.keys():
+        num_paginas = paginas_in_categorias(categoria)
+        for i in requisicao_dermage(categoria, num_paginas):
+            with ThreadPoolExecutor(max_workers=10) as executor:
+                executor.map(codigos_skus.append(i))
+    return list(set(codigos_skus))
+
+
+def informacoes_produtos(codigos_skus):
+    DICIO['produtos'], DICIO['precos'] = [], []
+    DICIO['lojas'] = [
+        {'id': 1, 'nome': 'Dermage', 'site': 'htttps://www.dermage.com.br'}]
+    num = 0
+    for codigo_sku in codigos_skus:
+        produtos = dermage_session.get(
+            f'https://www.dermage.com.br/produto/sku/{codigo_sku}').json()
+        for produto in produtos:
+            if re.search('78953891', produto['Ean']):
+                num += 1
+                ean, nome, preco = produto['Ean'], produto['Name'], locale.currency(
+                    produto['SkuSellersInformation'][0]['Price'])
+                DICIO['produtos'].append({'nome': nome, 'ean': ean})
+                DICIO['precos'].append(
+                    {'id': num, 'ean_id': ean, 'loja_id': 1, 'preco': preco})
+    return DICIO
+
+
+def criar_json(info):
+    with open('JSON/dermage.json', 'w') as jsonfile:
+        json.dump(info, jsonfile)
 
 
 def start():
-    informacoes_produtos(listar_skus())
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        executor.map(criar_json(informacoes_produtos(listar_codigos_skus())))
 
 
 start()
