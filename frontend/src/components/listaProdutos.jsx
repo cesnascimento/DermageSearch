@@ -18,7 +18,7 @@ import {
 import { Link } from '@chakra-ui/react'
 import { Button, ButtonGroup } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
-import data from '../json/drogariacatarinense.json'
+import data from '../json/geral.json'
 
 
 function ListaProdutos() {
@@ -67,7 +67,7 @@ function ListaProdutos() {
                             </Thead>
                             {produtos.filter(data => {
                                 if (searchTerm == '') {
-                                    return ''
+                                    return data
                                 } else if (data.nome.toLowerCase().includes(searchTerm.toLocaleLowerCase())) {
                                     return data
                                 }
@@ -93,7 +93,7 @@ function ListaProdutos() {
                                                     <Tbody>
                                                         <Tr key={produto.id}>
                                                             <Td>{produto.ean_id}</Td>
-                                                            <Td>{produto.preco}</Td>
+                                                            <Td isNumeric>{produto.preco}</Td>
                                                             <Td><Link href={procurarLoja(produto.loja_id).site} isExternal>{procurarLoja(produto.loja_id).nome}</Link></Td>
                                                         </Tr>
                                                     </Tbody>
