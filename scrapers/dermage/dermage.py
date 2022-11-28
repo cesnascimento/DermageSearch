@@ -19,8 +19,9 @@ def requisicao_dermage(categoria, num_paginas):
         soup = BeautifulSoup(dermage.text, 'html.parser')
         buscar_skus = [x['data-id']
                        for x in soup.find_all('span', 'skuProd')]
-        for sku in buscar_skus:
-            codigos_skus.append(sku)
+        with ThreadPoolExecutor(max_workers=10) as executor:
+            for sku in buscar_skus:
+                executor.map(codigos_skus.append(sku))
     return codigos_skus
 
 
@@ -36,7 +37,7 @@ def listar_codigos_skus():
     for categoria in paginas_categorias.keys():
         num_paginas = paginas_in_categorias(categoria)
         for i in requisicao_dermage(categoria, num_paginas):
-            with ThreadPoolExecutor(max_workers=10) as executor:
+            with ThreadPoolExecutor(max_workers=30) as executor:
                 executor.map(codigos_skus.append(i))
     return list(set(codigos_skus))
 
@@ -66,7 +67,7 @@ def criar_json(info):
 
 
 def start():
-    with ThreadPoolExecutor(max_workers=10) as executor:
+    with ThreadPoolExecutor(max_workers=50) as executor:
         executor.map(criar_json(informacoes_produtos(listar_codigos_skus())))
 
 

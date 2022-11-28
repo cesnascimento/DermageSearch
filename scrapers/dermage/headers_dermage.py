@@ -1,4 +1,4 @@
-def headers(categ): return {
+headers = lambda categ: {
   'authority': 'www.dermage.com.br',
   'accept': '*/*',
   'accept-language': 'pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
@@ -15,8 +15,7 @@ def headers(categ): return {
   'x-requested-with': 'XMLHttpRequest',
 }
 
-
-def params(page_number): return {
+params = lambda page_number: {
   'PS': '32',
   'sl': 'b7a2f291-c412-4676-ae81-82bfd7e36c33',
   'cc': '4',
@@ -24,11 +23,10 @@ def params(page_number): return {
   'PageNumber': f'{page_number}',
 }
 
-
-def mount_payload(categ, page_number): return {
+mount_payload = lambda categ, page_number: {
   'url': f'https://www.dermage.com.br/{categ}',
-  'params': params(page_number),
-  'headers': headers(categ)
+  'params':params(page_number),
+  'headers':headers(categ)
 }
 
 

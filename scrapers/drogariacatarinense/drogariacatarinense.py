@@ -23,14 +23,14 @@ def buscar_produtos(lista_items):
 
 def informacoes_produtos():
     info_produtos = buscar_produtos(requisicao_drogariacatarinense())
-    DICIO['produtos'], DICIO['precos'] = [], []
+    DICIO['precos'] = []
     DICIO['lojas'] = [{'id': 2, 'nome': 'Drogaria Catarinense',
                       'site': 'https://www.drogariacatarinense.com.br'}]
-    for num, produto in enumerate(info_produtos, 123):
-        nome, ean = produto[0]['name'], produto[0]['ean']
+    for num, produto in enumerate(info_produtos, 125):
+        ean = produto[0]['ean']
         preco = locale.currency(
             produto[0]['sellers'][0]['commertialOffer']['Price'])
-        DICIO['produtos'].append({'nome': nome, 'ean': ean})
+        #DICIO['produtos'].append({'nome': nome, 'ean': ean})
         DICIO['precos'].append(
             {'id': num, 'ean_id': ean, 'loja_id': 2, 'preco': preco})
     return DICIO
