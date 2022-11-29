@@ -15,6 +15,6 @@ headers = {
 
 params = lambda num_pagina, offset: {
     'p': num_pagina,
-    'limit': '24',
+    'limit': '48',
     'offset': offset,
 }
