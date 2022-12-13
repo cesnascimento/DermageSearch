@@ -37,7 +37,6 @@ def buscar_produto():
         offset = offset_paginas(pagina)
         drogaraia = requisicao_drogaraia(pagina, offset)
         for produto in drogaraia:
-            print(produto)
             produtos.append(produto)
     return produtos
 
@@ -48,10 +47,10 @@ def informacoes_produtos(produtos):
         {'id': 6, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
     for num, produto in enumerate(produtos, 325):
         nome = produto['name']
-        ean, preco = produto['ean'], locale.currency(produto['valueTo'])
+        ean, preco, link = produto['ean'], locale.currency(produto['valueTo']), produto['urlKey'].replace('//', 'https://')
         print(nome, ean, preco)
         DICIO['precos'].append(
-                {'id': num, 'ean_id': ean, 'loja_id': 6, 'preco': preco})
+                {'id': num, 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link})
     return DICIO
 
 

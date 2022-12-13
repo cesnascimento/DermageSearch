@@ -36,7 +36,7 @@ def navegar_produtos(links):
             preco = soup.find('strong', 'skuBestPrice').getText()
             preco = re.sub(' ', '', preco)
             DICIO['precos'].append(
-                {'id': num, 'ean_id': ean, 'loja_id': 4, 'preco': preco})
+                {'id': num, 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': link})
         except:
             pass
     return DICIO

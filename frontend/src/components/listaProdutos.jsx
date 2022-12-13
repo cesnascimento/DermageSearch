@@ -43,7 +43,7 @@ function ListaProdutos() {
         let nomeDaLoja = lojas.find(loja => loja.id === idLoja);
         return nomeDaLoja;
     }
-
+    
     return (
         <>
             <Center w='100vw' marginTop={'100px'}>
@@ -94,7 +94,7 @@ function ListaProdutos() {
                                                         <Tr key={produto.id}>
                                                             <Td>{produto.ean_id}</Td>
                                                             <Td isNumeric>{produto.preco}</Td>
-                                                            <Td><Link href={procurarLoja(produto.loja_id).site} isExternal>{procurarLoja(produto.loja_id).nome}</Link></Td>
+                                                            <Td><Link href={produto.link} isExternal>{procurarLoja(produto.loja_id).nome}</Link></Td>
                                                         </Tr>
                                                     </Tbody>
                                                 ))}

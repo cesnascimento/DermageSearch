@@ -24,9 +24,10 @@ def buscar_produtos(links_produtos):
         soup = BeautifulSoup(belezanaweb.text, 'html.parser')
         info_produtos = json.loads(soup.find('script', type='application/ld+json').string)
         for produto in info_produtos:
-            ean, preco = produto['gtin'], locale.currency(float(produto['offers']['offers'][0]['price']))
+            ean, preco = produto['gtin'], locale.currency(float(produto['offers']['highPrice']))
             DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 5, 'preco': preco})
+            {'id': num, 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link_produto['href']})
+    print(DICIO)
     return DICIO
 
 

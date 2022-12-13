@@ -22,11 +22,10 @@ def buscar_produtos(produtos):
     DICIO['lojas'] = [
         {'id': 3, 'nome': 'Sephora', 'site': 'https://www.sephora.com.br/'}]
     for num, produto in enumerate(produtos['products'], 175):
-        print(num)
-        preco, ean = locale.currency(produto['price']), produto['skus'][0]['properties']['eanCode']
-        #DICIO['produtos'].append({'nome': nome, 'ean': ean})
+        preco, ean, link = locale.currency(
+            produto['price']), produto['skus'][0]['properties']['eanCode'], produto['skus'][0]['properties']['url']
         DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 3, 'preco': preco})
+            {'id': num, 'ean_id': ean, 'loja_id': 3, 'preco': preco, 'link': f'https://www.sephora.com.br/{link.replace("/", "")}'})
     return DICIO
 
 
