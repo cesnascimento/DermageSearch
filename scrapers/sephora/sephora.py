@@ -1,6 +1,7 @@
 import requests
 import locale
 import json
+from datetime import datetime
 from headers_sephora import headers, params
 
 sephora_session = requests.Session()
@@ -17,6 +18,11 @@ def requisicao_sephora():
     return produtos
 
 
+def data_hora():
+    data = datetime.now()
+    atual = data.strftime("%d/%m/%Y - %H:%M:%S")
+    return atual
+
 def buscar_produtos(produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
@@ -25,7 +31,7 @@ def buscar_produtos(produtos):
         preco, ean, link = locale.currency(
             produto['price']), produto['skus'][0]['properties']['eanCode'], produto['skus'][0]['properties']['url']
         DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 3, 'preco': preco, 'link': f'https://www.sephora.com.br/{link.replace("/", "")}'})
+            {'id': num, 'ean_id': ean, 'loja_id': 3, 'preco': preco, 'link': f'https://www.sephora.com.br/{link.replace("/", "")}', 'datahora': data_hora()})
     return DICIO
 
 

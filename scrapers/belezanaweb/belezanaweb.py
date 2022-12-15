@@ -1,6 +1,7 @@
 import requests
 import json
 import locale
+from datetime import datetime
 from bs4 import BeautifulSoup
 from headers_belezanweb import headers
 
@@ -15,6 +16,13 @@ def requisicao_belezanaweb():
     links_produtos = soup.findAll('a', 'showcase-item-image')
     return list(set(links_produtos))
 
+
+def data_hora():
+    data = datetime.now()
+    atual = data.strftime("%d/%m/%Y - %H:%M:%S")
+    return atual
+
+
 def buscar_produtos(links_produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
@@ -26,7 +34,7 @@ def buscar_produtos(links_produtos):
         for produto in info_produtos:
             ean, preco = produto['gtin'], locale.currency(float(produto['offers']['highPrice']))
             DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link_produto['href']})
+            {'id': num, 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link_produto['href'], 'datahora': data_hora()})
     print(DICIO)
     return DICIO
 

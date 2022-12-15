@@ -2,6 +2,7 @@ import requests
 import re
 import json
 import locale
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from bs4 import BeautifulSoup
 from headers_dermage import mount_payload, paginas_categorias
@@ -41,6 +42,12 @@ def listar_codigos_skus():
     return list(set(codigos_skus))
 
 
+def data_hora():
+    data = datetime.now()
+    atual = data.strftime("%d/%m/%Y - %H:%M:%S")
+    return atual
+
+
 def informacoes_produtos(codigos_skus):
     DICIO['produtos'], DICIO['precos'] = [], []
     DICIO['lojas'] = [
@@ -56,7 +63,7 @@ def informacoes_produtos(codigos_skus):
                     produto['SkuSellersInformation'][0]['Price'])
                 DICIO['produtos'].append({'nome': nome, 'ean': ean})
                 DICIO['precos'].append(
-                    {'id': num, 'ean_id': ean, 'loja_id': 1, 'preco': preco})
+                    {'id': num, 'ean_id': ean, 'loja_id': 1, 'preco': preco, 'datahora': data_hora()})
     return DICIO
 
 

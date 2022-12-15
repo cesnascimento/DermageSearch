@@ -1,7 +1,8 @@
-from headers_drogariacatarinense import headers
 import requests
 import locale
 import json
+from datetime import datetime
+from headers_drogariacatarinense import headers
 
 
 drogariacatarinense_session = requests.Session()
@@ -23,6 +24,12 @@ def buscar_produtos(lista_items):
     return lista_produtos, links_produtos
 
 
+def data_hora():
+    data = datetime.now()
+    atual = data.strftime("%d/%m/%Y - %H:%M:%S")
+    return atual
+
+
 def informacoes_produtos():
     info_produtos, links_produtos = buscar_produtos(requisicao_drogariacatarinense())
     DICIO['precos'] = []
@@ -32,7 +39,7 @@ def informacoes_produtos():
         ean, preco = produto[0]['ean'], locale.currency(
             produto[0]['sellers'][0]['commertialOffer']['Price'])
         DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link})
+            {'id': num, 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
     return DICIO
 
 
