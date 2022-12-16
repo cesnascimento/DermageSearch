@@ -58,15 +58,15 @@ function ListaProdutos() {
                         </Input>
                     </InputGroup>
                     <Accordion sx={{ 'border': 'transparent' }} allowToggle>
-                        <AccordionItem>
-                            <TableContainer>
-                                <Table variant='unstyled'>
-                                    <TableCaption>Dermage Products Search</TableCaption>
-                                    <Thead>
-                                        <Tr>
-                                            <Td><Text as='b'>Produto</Text></Td>
-                                        </Tr>
-                                    </Thead>
+                        <TableContainer>
+                            <Table variant='unstyled'>
+                                <TableCaption>Dermage Products Search</TableCaption>
+                                <Thead>
+                                    <Tr>
+                                        <Td><Text as='b'>Produto</Text></Td>
+                                    </Tr>
+                                </Thead>
+                                <AccordionItem sx={{ 'border': 'transparent' }} allowToggle>
                                     {produtos.filter(data => {
                                         if (searchTerm == '') {
                                             return data
@@ -77,13 +77,12 @@ function ListaProdutos() {
                                         <Tbody>
                                             <Tr key={produto.ean}>
                                                 <Td>{produto.nome}</Td>
-                                                <Td><AccordionButton _hover={{
-                                                    background: 'white',
-                                                    color: 'teal.500'
-                                                }}><Button colorScheme='blue' size='xs' margin={2} onClick={() => mostrarDadosDoProduto(produto)}>Ver preço</Button></AccordionButton></Td>
+                                                <Td><Button colorScheme='blue' size='xs' margin={2} onClick={() => mostrarDadosDoProduto(produto)}><AccordionButton _hover={{
+                                                    color: 'white'
+                                                }}>Ver preço</AccordionButton></Button></Td>
                                             </Tr>
                                             <AccordionPanel pb={4}>
-                                                {ProdutoSelecionado && ProdutoSelecionado.ean == produto.ean && (
+                                            {ProdutoSelecionado.ean == produto.ean && (
                                                     <Center marginLeft={20}>
                                                         <TableContainer>
                                                             <Table variant='unstyled' size='sm'>
@@ -111,13 +110,13 @@ function ListaProdutos() {
                                                         </TableContainer>
 
                                                     </Center>
-                                                )}
+                                            )}
                                             </AccordionPanel>
                                         </Tbody>
                                     ))}
-                                </Table>
-                            </TableContainer>
-                        </AccordionItem>
+                                </AccordionItem>
+                            </Table>
+                        </TableContainer>
                     </Accordion>
                 </Box >
             </Center >

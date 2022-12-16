@@ -54,13 +54,14 @@ def data_hora():
 def get_name_marketplace(link):
     http = requests.get(link)
     soup = BeautifulSoup(http.text, 'html.parser')
-    print(soup)
     try:
         market = soup.find('p', attrs={'data-testid': True}).getText()
         market = re.sub('Vendido e entregue por', '', market).strip()
-        return market
+        preco = json.loads(soup.find("script", type='application/ld+json').getText())['offers']['price']
+        print(preco)
+        return market, preco
     except:
-        return ''
+        pass
 
 
 def informacoes_produtos(produtos):
@@ -69,11 +70,16 @@ def informacoes_produtos(produtos):
         {'id': 6, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
     for num, produto in enumerate(produtos, 325):
         nome = produto['name']
-        ean, preco, link = produto['ean'], locale.currency(
-            produto['valueTo']), produto['urlKey'].replace('//', 'https://')
-        print(nome, ean, get_name_marketplace(link))
-        DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': get_name_marketplace(link)})
+        ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
+        print(link)
+        try:
+            market, preco = get_name_marketplace(link)
+            preco = locale.currency(float(preco))
+            print(nome, ean, link, preco)
+            DICIO['precos'].append(
+                {'id': num, 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
+        except:
+            pass
     return DICIO
 
 
