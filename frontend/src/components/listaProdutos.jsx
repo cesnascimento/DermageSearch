@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Center, Text, Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Center, Text, Box, Input, InputGroup, InputLeftElement, border } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -57,67 +57,64 @@ function ListaProdutos() {
                             onChange={e => { setSearchTerm(e.target.value) }}>
                         </Input>
                     </InputGroup>
-                    <Accordion sx={{ 'border': 'transparent' }} allowToggle>
-                        <TableContainer>
-                            <Table variant='unstyled'>
-                                <TableCaption>Dermage Products Search</TableCaption>
-                                <Thead>
-                                    <Tr>
-                                        <Td><Text as='b'>Produto</Text></Td>
-                                    </Tr>
-                                </Thead>
-                                <AccordionItem sx={{ 'border': 'transparent' }} allowToggle>
-                                    {produtos.filter(data => {
-                                        if (searchTerm == '') {
-                                            return data
-                                        } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
-                                            return data
-                                        }
-                                    }).map(produto => (
-                                        <Tbody>
-                                            <Tr key={produto.ean}>
-                                                <Td>{produto.nome}</Td>
-                                                <Td><Button colorScheme='blue' size='xs' margin={2} onClick={() => mostrarDadosDoProduto(produto)}><AccordionButton _hover={{
-                                                    color: 'white'
-                                                }}>Ver preço</AccordionButton></Button></Td>
-                                            </Tr>
-                                            <AccordionPanel pb={4}>
-                                            {ProdutoSelecionado.ean == produto.ean && (
-                                                    <Center marginLeft={20}>
-                                                        <TableContainer>
-                                                            <Table variant='unstyled' size='sm'>
-                                                                <TableCaption>Dermage Products Search</TableCaption>
-                                                                <Thead>
-                                                                    <Tr>
-                                                                        <Th>Código EAN</Th>
-                                                                        <Th isNumeric>Preço</Th>
-                                                                        <Th>Site</Th>
-                                                                        <Th>Data/Hora</Th>
-                                                                    </Tr>
-                                                                </Thead>
-                                                                {dadosDoProduto.map(produto => (
-                                                                    <Tbody>
-                                                                        <Tr key={produto.id}>
-                                                                            <Td>{produto.ean_id}</Td>
-                                                                            <Td isNumeric>{produto.preco}</Td>
-                                                                            <Td><Link href={produto.link} isExternal>{procurarLoja(produto.loja_id).nome} <Text fontSize='0.8em'>{produto?.market}</Text></Link></Td>
-                                                                            <Td>{produto.datahora}</Td>
-                                                                        </Tr>
-                                                                    </Tbody>
-                                                                ))}
-
-                                                            </Table>
-                                                        </TableContainer>
-
-                                                    </Center>
-                                            )}
-                                            </AccordionPanel>
-                                        </Tbody>
-                                    ))}
-                                </AccordionItem>
-                            </Table>
-                        </TableContainer>
-                    </Accordion>
+                    <TableContainer>
+                        <Table variant='unstyled'>
+                            <TableCaption>Dermage Products Search</TableCaption>
+                            <Center>
+                                <Accordion allowToggle>
+                                    <Thead>
+                                        <Tr>
+                                            <Th><Text as='b'>Produto</Text></Th>
+                                        </Tr>
+                                    </Thead>
+                                        {produtos.filter(data => {
+                                            if (searchTerm == '') {
+                                                return data
+                                            } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
+                                                return data
+                                            }
+                                        }).map(produto => (
+                                            <Tbody>
+                                                <AccordionItem sx={{ border: 'transparent', position: 'relative'}}>
+                                                    <Tr>
+                                                        <Td>{produto.nome}</Td>
+                                                        <Td sx={{position: 'absolute', right: 0}}><Button colorScheme='blue' size='xs'><AccordionButton color='white' onClick={() => mostrarDadosDoProduto(produto)} _hover={{color:'white'}}>Ver Preço</AccordionButton></Button></Td>
+                                                    </Tr>
+                                                    {ProdutoSelecionado && ProdutoSelecionado.ean == produto.ean && (
+                                                        <AccordionPanel>
+                                                            <Center>
+                                                                <TableContainer>
+                                                                    <Table variant='unstyled' size='sm'>
+                                                                        <Thead>
+                                                                            <Tr>
+                                                                                <Th>Código EAN</Th>
+                                                                                <Th isNumeric>Preço</Th>
+                                                                                <Th>Site</Th>
+                                                                                <Th>Data/Hora</Th>
+                                                                            </Tr>
+                                                                        </Thead>
+                                                                        {dadosDoProduto.map(produto => (
+                                                                            <Tbody>
+                                                                                <Tr>
+                                                                                    <Td>{produto.ean_id}</Td>
+                                                                                    <Td isNumeric>{produto.preco}</Td>
+                                                                                    <Td><Link href={produto.link} isExternal>{procurarLoja(produto.loja_id).nome} <Text fontSize='0.8em'>{produto?.market}</Text></Link></Td>
+                                                                                    <Td>{produto.datahora}</Td>
+                                                                                </Tr>
+                                                                            </Tbody>
+                                                                        ))}
+                                                                    </Table>
+                                                                </TableContainer>
+                                                            </Center>
+                                                        </AccordionPanel>
+                                                    )}
+                                                </AccordionItem>
+                                            </Tbody>
+                                        ))}
+                                </Accordion>
+                            </Center>
+                        </Table>
+                    </TableContainer>
                 </Box >
             </Center >
         </>

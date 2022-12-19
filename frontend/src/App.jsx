@@ -12,6 +12,7 @@ function App() {
       <Image src='src/assets/logo.png' alt='dermage-logo' bg='#ff8400'></Image>
     </Heading>
       {<ListaProdutos/>}
+      {/* {<Teste2/>} */}
   </Box>
   </>
   )
