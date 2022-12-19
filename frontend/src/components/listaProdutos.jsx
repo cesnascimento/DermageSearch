@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Center, Text, Box, Input, InputGroup, InputLeftElement, border } from '@chakra-ui/react'
+import { Center, Text, Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -17,7 +17,7 @@ import {
     AccordionIcon,
 } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/react'
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
 import data from '../json/geral.json'
 
