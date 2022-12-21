@@ -1,36 +1,49 @@
 import json
+import os
 
-dicio = dict()
-with open('JSON/dermage.json', 'r') as f1, open('JSON/drogariacatarinense.json', 'r') as f2, open('JSON/sephora.json', 'r') as f3, open('JSON/epocacosmeticos.json', 'r') as f4, open('JSON/belezanaweb.json', 'r') as f5, open('JSON/drogaraia.json', 'r') as f6, open('JSON/farmagora.json', 'r') as f7:
-    f1, f2, f3, f4, f5, f6, f7 = json.load(f1), json.load(f2), json.load(f3), json.load(f4), json.load(f5), json.load(f6), json.load(f7)
 
-    #lojas
-    for lojas in f2['lojas']:
-        f1['lojas'].append(lojas)
-    for lojas in f3['lojas']:
-        f1['lojas'].append(lojas)
-    for lojas in f4['lojas']:
-        f1['lojas'].append(lojas)
-    for lojas in f5['lojas']:
-        f1['lojas'].append(lojas)
-    for lojas in f6['lojas']:
-        f1['lojas'].append(lojas)
-    for lojas in f7['lojas']:
-        f1['lojas'].append(lojas)
-    
-    #precos
-    for precos in f2['precos']:
-        f1['precos'].append(precos)
-    for precos in f3['precos']:
-        f1['precos'].append(precos)
-    for precos in f4['precos']:
-        f1['precos'].append(precos)
-    for precos in f5['precos']:
-        f1['precos'].append(precos)
-    for precos in f6['precos']:
-        f1['precos'].append(precos)
-    for precos in f7['precos']:
-        f1['precos'].append(precos)
+def folder_jsons():
+    files_json = os.listdir('JSON')
+    return files_json
 
-    with open('JSON/geral1.json', 'w') as jsonfile:
-        json.dump(f1, jsonfile)
+
+def read_json_dermage(files):
+    dermage_json = [file for file in files if 'dermage.json' in file]
+    return os.path.join('JSON', dermage_json[0])
+
+
+def open_archive_json(file):
+    file = json.load(open(file, 'r'))
+    return file
+
+
+def get_json_geral(files):
+    file = [os.path.join('JSON', file)
+            for file in files if 'dermage' not in file if 'geral' not in file]
+    return file
+
+
+def build_json(dermage, jsons):
+    for json in jsons:
+        archive = open_archive_json(json)
+        for lojas in archive['lojas']:
+            dermage['lojas'].append(lojas)
+        for precos in archive['precos']:
+            dermage['precos'].append(precos)
+    return dermage
+
+
+def create_json(file):
+    with open('JSON/geral.json', 'w') as archive:
+        json.dump(file, archive)
+
+
+def start():
+    file_dermage = read_json_dermage(folder_jsons())
+    dermage = open_archive_json(file_dermage)
+    jsons = get_json_geral(folder_jsons())
+    file = build_json(dermage, jsons)
+    create_json(file)
+
+
+start()
