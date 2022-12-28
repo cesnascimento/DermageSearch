@@ -67,50 +67,56 @@ function ListaProdutos() {
                                             <Th><Text as='b'>Produto</Text></Th>
                                         </Tr>
                                     </Thead>
-                                        {produtos.filter(data => {
-                                            if (searchTerm == '') {
-                                                return data
-                                            } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
-                                                return data
-                                            }
-                                        }).map(produto => (
-                                            <Tbody>
-                                                <AccordionItem sx={{ border: 'transparent', position: 'relative', width:'100%'}}>
-                                                    <Tr sx={{display:'flex', justifyContent:'space-between'}}>
-                                                        <Td>{produto.nome}</Td>
-                                                        <Td sx={{position: 'absolute', right: 0}}><Button colorScheme='blue' size='xs'><AccordionButton color='white' onClick={() => mostrarDadosDoProduto(produto)} _hover={{color:'white'}}>Ver Preço</AccordionButton></Button></Td>
-                                                    </Tr>
-                                                    {ProdutoSelecionado && ProdutoSelecionado.ean == produto.ean && (
-                                                        <AccordionPanel>
-                                                            <Center>
-                                                                <TableContainer>
-                                                                    <Table variant='unstyled' size='sm'>
-                                                                        <Thead>
+                                    {produtos.filter(data => {
+                                        if (searchTerm == '') {
+                                            return data
+                                        } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
+                                            return data
+                                        }
+                                    }).map(produto => (
+                                        <Tbody>
+                                            <AccordionItem sx={{ border: 'transparent', position: 'relative', width: '100%' }}>
+                                                <Tr sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                    <Td>{produto.nome}</Td>
+                                                    <Td sx={{ right: 0 }}><Button colorScheme='blue' size='xs'><AccordionButton color='white' onClick={() => mostrarDadosDoProduto(produto)} _hover={{ color: 'white' }}>Ver Preço</AccordionButton></Button></Td>
+                                                </Tr>
+                                                {ProdutoSelecionado && ProdutoSelecionado.ean == produto.ean && (
+                                                    <AccordionPanel>
+                                                        <Center>
+                                                            <TableContainer>
+                                                                <Table variant='unstyled' size='sm'>
+                                                                    <Thead>
+                                                                        <Tr>
+                                                                            <Th>Código EAN</Th>
+                                                                            <Th isNumeric>Preço</Th>
+                                                                            <Th>Site</Th>
+                                                                            <Th>Data/Hora</Th>
+                                                                        </Tr>
+                                                                    </Thead>
+                                                                    {dadosDoProduto.map(produto => (
+                                                                        <Tbody>
                                                                             <Tr>
-                                                                                <Th>Código EAN</Th>
-                                                                                <Th isNumeric>Preço</Th>
-                                                                                <Th>Site</Th>
-                                                                                <Th>Data/Hora</Th>
+                                                                                <Td>{produto.ean_id}</Td>
+                                                                                <Td isNumeric>{produto.preco}</Td>
+                                                                                <Td>
+                                                                                    <Link href={produto.link} isExternal>{procurarLoja(produto.loja_id).nome}
+                                                                                        { produto?.market !== undefined && (
+                                                                                            <Text fontSize='0.8em'>Vendedor: {produto?.market}</Text>
+                                                                                        ) }
+                                                                                    </Link>
+                                                                                </Td>
+                                                                                <Td>{produto.datahora}</Td>
                                                                             </Tr>
-                                                                        </Thead>
-                                                                        {dadosDoProduto.map(produto => (
-                                                                            <Tbody>
-                                                                                <Tr>
-                                                                                    <Td>{produto.ean_id}</Td>
-                                                                                    <Td isNumeric>{produto.preco}</Td>
-                                                                                    <Td><Link href={produto.link} isExternal>{procurarLoja(produto.loja_id).nome} <Text fontSize='0.8em'>{produto?.market}</Text></Link></Td>
-                                                                                    <Td>{produto.datahora}</Td>
-                                                                                </Tr>
-                                                                            </Tbody>
-                                                                        ))}
-                                                                    </Table>
-                                                                </TableContainer>
-                                                            </Center>
-                                                        </AccordionPanel>
-                                                    )}
-                                                </AccordionItem>
-                                            </Tbody>
-                                        ))}
+                                                                        </Tbody>
+                                                                    ))}
+                                                                </Table>
+                                                            </TableContainer>
+                                                        </Center>
+                                                    </AccordionPanel>
+                                                )}
+                                            </AccordionItem>
+                                        </Tbody>
+                                    ))}
                                 </Accordion>
                             </Center>
                         </Table>
