@@ -75,8 +75,8 @@ function ListaProdutos() {
                                             }
                                         }).map(produto => (
                                             <Tbody>
-                                                <AccordionItem sx={{ border: 'transparent', position: 'relative'}}>
-                                                    <Tr>
+                                                <AccordionItem sx={{ border: 'transparent', position: 'relative', width:'100%'}}>
+                                                    <Tr sx={{display:'flex', justifyContent:'space-between'}}>
                                                         <Td>{produto.nome}</Td>
                                                         <Td sx={{position: 'absolute', right: 0}}><Button colorScheme='blue' size='xs'><AccordionButton color='white' onClick={() => mostrarDadosDoProduto(produto)} _hover={{color:'white'}}>Ver Preço</AccordionButton></Button></Td>
                                                     </Tr>
