@@ -58,7 +58,6 @@ def get_name_marketplace(link):
         market = soup.find('p', attrs={'data-testid': True}).getText()
         market = re.sub('Vendido e entregue por', '', market).strip()
         preco = json.loads(soup.find("script", type='application/ld+json').getText())['offers']['price']
-        print(preco)
         return market, preco
     except:
         pass
@@ -71,7 +70,6 @@ def informacoes_produtos(produtos):
     for num, produto in enumerate(produtos, 325):
         nome = produto['name']
         ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
-        print(link)
         try:
             market, preco = get_name_marketplace(link)
             preco = locale.currency(float(preco))
@@ -84,7 +82,7 @@ def informacoes_produtos(produtos):
 
 
 def criar_json(info):
-    with open('JSON/drogaraia.json', 'w') as jsonfile:
+    with open('../JSON/drogaraia.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

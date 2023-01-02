@@ -50,7 +50,7 @@ def navegar_produtos(links):
 
 
 def criar_json(info):
-    with open('JSON/epocacosmeticos.json', 'w') as jsonfile:
+    with open('../JSON/epocacosmeticos.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

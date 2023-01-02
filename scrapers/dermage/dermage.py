@@ -68,7 +68,7 @@ def informacoes_produtos(codigos_skus):
 
 
 def criar_json(info):
-    with open('JSON/dermage.json', 'w') as jsonfile:
+    with open('../JSON/dermage.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

@@ -37,7 +37,7 @@ def requisicao_farmagora():
 
 
 def criar_json(info):
-    with open('JSON/farmagora.json', 'w') as jsonfile:
+    with open('../JSON/farmagora.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

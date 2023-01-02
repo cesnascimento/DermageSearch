@@ -40,7 +40,7 @@ def buscar_produtos(links_produtos):
 
 
 def criar_json(info):
-    with open('JSON/belezanaweb.json', 'w') as jsonfile:
+    with open('../JSON/belezanaweb.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

@@ -36,7 +36,7 @@ def buscar_produtos(produtos):
 
 
 def criar_json(info):
-    with open('JSON/sephora.json', 'w') as jsonfile:
+    with open('../JSON/sephora.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 
