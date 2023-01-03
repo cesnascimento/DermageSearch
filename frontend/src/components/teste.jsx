@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Center, Text, Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Flex, Center, Text, Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import {
     Table,
     Thead,
@@ -17,6 +17,7 @@ import {
     AccordionIcon,
 } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/react'
+import { Select } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
 import data from '../json/geral.json'
@@ -27,6 +28,8 @@ function ListaProdutos() {
 
     const [ProdutoSelecionado, setProdutoSelecionado] = useState(null)
     const [dadosDoProduto, setDadosDoProduto] = useState(null)
+
+    /* const sortOptions = ['name'] */
 
     const produtos = data.produtos
     const precos = data.precos
@@ -50,15 +53,22 @@ function ListaProdutos() {
             <Center>
                 <Box>
                     <Text fontSize='5xl' align='center'>Dermage Product Search</Text>
-                    <InputGroup marginTop={10}>
-                        <InputLeftElement m='1' pointerEvents='none' children={<BsSearch />} />
-                        <Input size='lg' bg='white' placeholder='Digite o nome do produto'
-                            _placeholder={{ opacity: 0.6, color: 'black' }}
-                            onChange={e => { setSearchTerm(e.target.value) }}>
-                        </Input>
-                    </InputGroup>
+                    <Flex ml='auto'>
+                        <InputGroup marginTop={10}>
+                            <InputLeftElement m='1' pointerEvents='none' children={<BsSearch />} />
+                            <Input size='lg' bg='white' placeholder='Digite o nome do produto'
+                                _placeholder={{ opacity: 0.6, color: 'black' }}
+                                onChange={e => { setSearchTerm(e.target.value) }}>
+                            </Input>
+                        </InputGroup>
+                        <Select icon='None' placeholder='Selecione' margin={10} sx={{width:'29%'}}>
+                            <option value='option1'>Alfabética</option>
+                        </Select>
+
+                    </Flex>
                     <TableContainer>
                         <Table variant='unstyled'>
+                            <TableCaption>Dermage Products Search</TableCaption>
                             <Center>
                                 <Accordion allowToggle>
                                     <Thead>
@@ -84,7 +94,6 @@ function ListaProdutos() {
                                                         <Center>
                                                             <TableContainer>
                                                                 <Table variant='unstyled' size='sm'>
-                                                                    <TableCaption>Dermage Products Search</TableCaption>
                                                                     <Thead>
                                                                         <Tr>
                                                                             <Th>Código EAN</Th>

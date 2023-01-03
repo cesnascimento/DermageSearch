@@ -1,15 +1,44 @@
-import json
-from collections import Counter
+import os
+from time import sleep
 
-dicio1 = {}
-dicio2 = {}
+def get_folder_scripts():
+    dir = os.getcwd()
+    return os.listdir(dir)
 
-with open('JSON/dermage.json', 'r') as f1, open('JSON/drogariacatarinense.json', 'r') as f2, open('JSON/sephora.json', 'r') as f3:
-    f1, f2, f3 = json.load(f1), json.load(f2), json.load(f3)
-    ini_dictionary1 = Counter(f1)
-    ini_dictionary2 = Counter(f2)
-    ini_dictionary3 = Counter(f3)
-    final_dictionary = {x: ini_dictionary1.get(x, 0) + ini_dictionary2.get(x, 0) + ini_dictionary3.get(x, 0)
-                        for x in set(ini_dictionary1).union(ini_dictionary2, ini_dictionary3)}
-    with open('JSON/geral.json', 'a') as jsonfile:
-        json.dump(final_dictionary, jsonfile)
+def get_old_folder():
+    return os.getcwd()
+
+def open_folder_scripts():
+    folder_scripts = get_folder_scripts()
+    list_dirs = list()
+    for folder in folder_scripts:
+        if os.path.isdir(folder) and folder != 'JSON':
+            open_folder_script = os.path.join(os.getcwd(), folder)
+            old_folder = os.getcwd()
+            os.chdir(open_folder_script)
+            list_dirs.append(open_folder_script)
+            os.chdir(old_folder)
+    
+    return list_dirs
+
+
+def run_scripts(dirs):
+    name_script = dirs.split('\\')[7]
+    for dir in os.listdir(dirs):
+        if '.py' in dir and name_script in dir and 'headers' not in dir:
+            os.chdir(dirs)
+            print(f'executando o script {dir}')
+            os.system(f'python3 {dir}')
+            os.chdir(dirs[:60])
+
+
+def start():
+    while True:
+        folders_scripts = open_folder_scripts()
+        print(folders_scripts)
+        for scripts in folders_scripts:
+            run_scripts(scripts)
+        os.system('python3 lerjson.py')
+        sleep(21600)
+
+start()
