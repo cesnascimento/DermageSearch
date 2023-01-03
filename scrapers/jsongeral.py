@@ -22,8 +22,7 @@ def open_folder_scripts():
     return list_dirs
 
 
-def run_scripts(dirs):
-    name_script = dirs.split('\\')[7]
+def run_scripts(dirs, name_script):
     for dir in os.listdir(dirs):
         if '.py' in dir and name_script in dir and 'headers' not in dir:
             os.chdir(dirs)
@@ -35,10 +34,10 @@ def run_scripts(dirs):
 def start():
     while True:
         folders_scripts = open_folder_scripts()
-        print(folders_scripts)
         for scripts in folders_scripts:
-            run_scripts(scripts)
+            name_script = scripts.split('\\')[7]
+            run_scripts(scripts, name_script)
         os.system('python3 lerjson.py')
-        sleep(21600)
+        sleep(420)
 
 start()
