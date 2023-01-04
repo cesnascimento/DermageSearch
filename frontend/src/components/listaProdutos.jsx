@@ -19,7 +19,7 @@ import {
 import { Link } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
-import data from '../json/geral.json'
+import data from '../../public/json/geral.json'
 
 
 function ListaProdutos() {
