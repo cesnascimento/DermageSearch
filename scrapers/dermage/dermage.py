@@ -16,6 +16,7 @@ locale.setlocale(locale.LC_MONETARY, '')
 def requisicao_dermage(categoria, num_paginas):
     codigos_skus = list()
     for num_pagina in num_paginas:
+        print(num_pagina)
         dermage = dermage_session.get(**mount_payload(categoria, num_pagina))
         soup = BeautifulSoup(dermage.text, 'html.parser')
         buscar_skus = [x['data-id']
@@ -29,7 +30,7 @@ def requisicao_dermage(categoria, num_paginas):
 def paginas_in_categorias(nome_categoria):
     if nome_categoria in paginas_categorias.keys():
         num_paginas = [num for num in range(
-            1, paginas_categorias[nome_categoria])]
+            0, paginas_categorias[nome_categoria])]
         return num_paginas
 
 
@@ -39,7 +40,8 @@ def listar_codigos_skus():
         num_paginas = paginas_in_categorias(categoria)
         for i in requisicao_dermage(categoria, num_paginas):
                 codigos_skus.append(i)
-    return list(set(codigos_skus))
+    print(codigos_skus)
+    return codigos_skus
 
 
 def data_hora():
@@ -68,7 +70,7 @@ def informacoes_produtos(codigos_skus):
 
 
 def criar_json(info):
-    with open('../JSON/dermage.json', 'w') as jsonfile:
+    with open('JSON/dermage.json', 'w') as jsonfile:
         json.dump(info, jsonfile)
 
 

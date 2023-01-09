@@ -4,7 +4,7 @@ headers = lambda categ: {
   'accept-language': 'pt-BR,pt;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6',
   'content-type': 'application/x-www-form-urlencoded; charset=UTF-8',
   'if-none-match': '"CA09C111155AB58EDE3D493F2A540B90"',
-  'referer': f'https://www.dermage.com.br/{categ}?PS=32&sl=b7a2f291-c412-4676-ae81-82bfd7e36c33&cc=4&sm=0&PageNumber=1',
+  'referer': f'https://www.dermage.com.br/{categ}?PS=32&sl=b7a2f291-c412-4676-ae81-82bfd7e36c33&cc=4&sm=0&PageNumber=0',
   'sec-ch-ua': '"Microsoft Edge";v="107", "Chromium";v="107", "Not=A?Brand";v="24"',
   'sec-ch-ua-mobile': '?0',
   'sec-ch-ua-platform': '"Windows"',
@@ -32,8 +32,5 @@ mount_payload = lambda categ, page_number: {
 
 paginas_categorias = {
   'rosto': 5,
-  'corpo': 3,
-  'cabelo': 2,
-  'fotoprotecao': 2,
-  'maquiagem': 3
+  
 }

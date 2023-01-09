@@ -41,7 +41,8 @@ def navegar_produtos(links):
         try:
             ean = soup.find('label', 'sku-ean-code').getText()
             preco = soup.find('strong', 'skuBestPrice').getText()
-            preco = re.sub(' ', '', preco)
+            print(preco)
+            """ preco = re.sub(' ', '', preco) """
             DICIO['precos'].append(
                 {'id': num, 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': link, 'datahora': data_hora()})
         except:
