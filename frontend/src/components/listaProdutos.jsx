@@ -1,10 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Center, Text, Box, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import {
     Table,
     Thead,
     Tbody,
-    Tfoot,
     Tr,
     Th,
     Td,
@@ -14,12 +13,12 @@ import {
     AccordionItem,
     AccordionButton,
     AccordionPanel,
-    AccordionIcon,
 } from '@chakra-ui/react'
 import { Link } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
-import data from '../../public/json/geral.json'
+import axios from 'axios'
+/* import data from '../../public/json/geral.json' */
 
 
 function ListaProdutos() {
@@ -27,10 +26,17 @@ function ListaProdutos() {
 
     const [ProdutoSelecionado, setProdutoSelecionado] = useState(null)
     const [dadosDoProduto, setDadosDoProduto] = useState(null)
+    const [data, setData] = useState(null);
 
-    const produtos = data.produtos
-    const precos = data.precos
-    const lojas = data.lojas
+    useEffect(() => {
+        fetch('json/geral.json')
+            .then(response => response.json())
+            .then(json => setData(json))
+    }, []);
+
+    const produtos = data?.produtos
+    const precos = data?.precos
+    const lojas = data?.lojas
 
     function mostrarDadosDoProduto(produto) {
         setProdutoSelecionado(produto)
@@ -66,7 +72,7 @@ function ListaProdutos() {
                                             <Th><Text as='b'>Produto</Text></Th>
                                         </Tr>
                                     </Thead>
-                                    {produtos.filter(data => {
+                                    {produtos?.filter(data => {
                                         if (searchTerm == '') {
                                             return data
                                         } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
