@@ -1,6 +1,7 @@
 import requests
 import locale
 import json
+from ulid import ULID
 from datetime import datetime
 from headers_drogariacatarinense import headers
 
@@ -35,11 +36,11 @@ def informacoes_produtos():
     DICIO['precos'] = []
     DICIO['lojas'] = [{'id': 2, 'nome': 'Drogaria Catarinense',
                       'site': 'https://www.drogariacatarinense.com.br'}]
-    for num, (produto, link) in enumerate(zip(info_produtos, links_produtos)):
+    for produto, link in zip(info_produtos, links_produtos):
         ean, preco = produto[0]['ean'], locale.currency(
             produto[0]['sellers'][0]['commertialOffer']['Price'])
         DICIO['precos'].append(
-            {'id': num, 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
     return DICIO
 
 

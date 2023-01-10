@@ -31,6 +31,9 @@ mount_payload = lambda categ, page_number: {
 
 
 paginas_categorias = {
-  'rosto': 5,
-  
+  'rosto': 6,
+  'corpo': 4,
+  'cabelo': 3,
+  'fotoprotecao': 3,
+  'maquiagem': 4
 }

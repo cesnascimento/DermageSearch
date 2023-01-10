@@ -2,6 +2,7 @@ import requests
 import json
 import re
 from datetime import datetime
+from ulid import ULID
 from headers_epocacosmeticos import headers
 from bs4 import BeautifulSoup
 
@@ -35,16 +36,14 @@ def navegar_produtos(links):
     DICIO['precos'] = []
     DICIO['lojas'] = [
         {'id': 4, 'nome': 'Epoca Cosmeticos', 'site': 'https://www.epocacosmeticos.com.br/'}]
-    for num, link in enumerate(links, 202):
+    for link in links:
         epocacosmeticos = epocacosmeticos_session.get(link)
         soup = BeautifulSoup(epocacosmeticos.text, 'html.parser')
         try:
             ean = soup.find('label', 'sku-ean-code').getText()
             preco = soup.find('strong', 'skuBestPrice').getText()
-            print(preco)
-            """ preco = re.sub(' ', '', preco) """
             DICIO['precos'].append(
-                {'id': num, 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': link, 'datahora': data_hora()})
+                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': link, 'datahora': data_hora()})
         except:
             pass
     return DICIO

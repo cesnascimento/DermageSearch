@@ -3,6 +3,7 @@ import locale
 import json
 from bs4 import BeautifulSoup
 import re
+from ulid import ULID
 from datetime import datetime
 from headers_drogaraia import headers, params
 from concurrent.futures import ThreadPoolExecutor
@@ -67,7 +68,7 @@ def informacoes_produtos(produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
         {'id': 6, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
-    for num, produto in enumerate(produtos, 325):
+    for produto in produtos:
         nome = produto['name']
         ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
         try:
@@ -75,7 +76,7 @@ def informacoes_produtos(produtos):
             preco = locale.currency(float(preco))
             print(nome, ean, link, preco)
             DICIO['precos'].append(
-                {'id': num, 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
+                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
         except:
             pass
     return DICIO
