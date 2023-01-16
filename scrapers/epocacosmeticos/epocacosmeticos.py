@@ -35,7 +35,7 @@ def data_hora():
 def navegar_produtos(links):
     DICIO['precos'] = []
     DICIO['lojas'] = [
-        {'id': 4, 'nome': 'Epoca Cosmeticos', 'site': 'https://www.epocacosmeticos.com.br/'}]
+        {'id': 2, 'nome': 'Epoca Cosmeticos', 'site': 'https://www.epocacosmeticos.com.br/'}]
     for link in links:
         epocacosmeticos = epocacosmeticos_session.get(link)
         soup = BeautifulSoup(epocacosmeticos.text, 'html.parser')
@@ -43,7 +43,7 @@ def navegar_produtos(links):
             ean = soup.find('label', 'sku-ean-code').getText()
             preco = soup.find('strong', 'skuBestPrice').getText()
             DICIO['precos'].append(
-                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': link, 'datahora': data_hora()})
+                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
         except:
             pass
     return DICIO

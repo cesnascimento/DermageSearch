@@ -30,15 +30,16 @@ def data_hora():
 def informacao_produto(infos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
-        {'id': 8, 'nome': 'Panvel', 'site': 'https://www.panvel.com'}]
+        {'id': 10, 'nome': 'Panvel', 'site': 'https://www.panvel.com'}]
     for info in infos:
+        print(info)
         panvel_code = info['panvelCode']
         panvel = panvel_session.get(
             f'https://www.panvel.com/api/v2/catalog/{panvel_code}?uf=RS', cookies=cookies, headers=headers).json()
-        ean, preco = panvel['ean'], locale.currency(
-            panvel['discount']['dealPrice'])
+        ean, preco, link = panvel['ean'], locale.currency(
+            panvel['discount']['dealPrice']), f'''https://https://www.panvel.com/{panvel['link']}'''
         DICIO['precos'].append(
-            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 1, 'preco': preco, 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 10, 'preco': preco, 'link': link, 'datahora': data_hora()})
     
     return DICIO
 

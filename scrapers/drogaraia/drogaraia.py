@@ -67,7 +67,7 @@ def get_name_marketplace(link):
 def informacoes_produtos(produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
-        {'id': 6, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
+        {'id': 5, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
     for produto in produtos:
         nome = produto['name']
         ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
@@ -76,7 +76,7 @@ def informacoes_produtos(produtos):
             preco = locale.currency(float(preco))
             print(nome, ean, link, preco)
             DICIO['precos'].append(
-                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
+                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
         except:
             pass
     return DICIO

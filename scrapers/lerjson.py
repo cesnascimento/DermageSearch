@@ -34,7 +34,7 @@ def build_json(dermage, jsons):
 
 
 def create_json(file):
-    with open('../frontend/src/json/geral.json', 'w') as archive:
+    with open('../frontend/json/geral.json', 'w') as archive:
         json.dump(file, archive)
 
 

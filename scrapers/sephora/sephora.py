@@ -27,12 +27,12 @@ def data_hora():
 def buscar_produtos(produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
-        {'id': 3, 'nome': 'Sephora', 'site': 'https://www.sephora.com.br/'}]
+        {'id': 4, 'nome': 'Sephora', 'site': 'https://www.sephora.com.br/'}]
     for produto in produtos['products']:
         preco, ean, link = locale.currency(
             produto['price']), produto['skus'][0]['properties']['eanCode'], produto['skus'][0]['properties']['url']
         DICIO['precos'].append(
-            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 3, 'preco': preco, 'link': f'https://www.sephora.com.br/{link.replace("/", "")}', 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 4, 'preco': preco, 'link': f'https://www.sephora.com.br/{link.replace("/", "")}', 'datahora': data_hora()})
     return DICIO
 
 

@@ -27,7 +27,7 @@ def data_hora():
 def buscar_produtos(links_produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
-        {'id': 5, 'nome': 'Belezanaweb', 'site': 'https://www.belezanaweb.com.br/'}]
+        {'id': 3, 'nome': 'Belezanaweb', 'site': 'https://www.belezanaweb.com.br/'}]
     for link_produto in links_produtos:
         belezanaweb = belezanaweb_session.get(link_produto['href'], headers=headers)
         soup = BeautifulSoup(belezanaweb.text, 'html.parser')
@@ -35,7 +35,7 @@ def buscar_produtos(links_produtos):
         for produto in info_produtos:
             ean, preco = produto['gtin'], locale.currency(float(produto['offers']['highPrice']))
             DICIO['precos'].append(
-            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link_produto['href'], 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 3, 'preco': preco, 'link': link_produto['href'], 'datahora': data_hora()})
     print(DICIO)
     return DICIO
 

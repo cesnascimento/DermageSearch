@@ -25,12 +25,12 @@ def data_hora():
 
 def informacoes_produtos(skus):
     DICIO['precos'] = []
-    DICIO['lojas'] = [{'id': 7, 'nome': 'Drogaria São Paulo',
+    DICIO['lojas'] = [{'id': 8, 'nome': 'Drogaria São Paulo',
                       'site': 'https://www.drogariasaopaulo.com.br/'}]
     for sku in skus:
         ean, preco, link =  sku['skus'][0]['properties']['eanCode'], sku['price'], f"https://{sku['url']}"
         DICIO['precos'].append(
-            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 7, 'preco': preco, 'link': link, 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 8, 'preco': preco, 'link': link, 'datahora': data_hora()})
     
     return DICIO
 

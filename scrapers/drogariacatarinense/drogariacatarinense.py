@@ -34,13 +34,13 @@ def data_hora():
 def informacoes_produtos():
     info_produtos, links_produtos = buscar_produtos(requisicao_drogariacatarinense())
     DICIO['precos'] = []
-    DICIO['lojas'] = [{'id': 2, 'nome': 'Drogaria Catarinense',
+    DICIO['lojas'] = [{'id': 6, 'nome': 'Drogaria Catarinense',
                       'site': 'https://www.drogariacatarinense.com.br'}]
     for produto, link in zip(info_produtos, links_produtos):
         ean, preco = produto[0]['ean'], locale.currency(
             produto[0]['sellers'][0]['commertialOffer']['Price'])
         DICIO['precos'].append(
-            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
+            {'id': str(ULID()), 'ean_id': ean, 'loja_id': 6, 'preco': preco, 'link': link, 'datahora': data_hora()})
     return DICIO
 
 

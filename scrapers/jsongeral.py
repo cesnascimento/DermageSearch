@@ -29,7 +29,7 @@ def run_scripts(dirs, name_script, old_dir):
         if '.py' in dir and name_script in dir and 'headers' not in dir:
             os.chdir(dirs)
             print(f'executando o script {dir}')
-            os.system(f'python3 {dir}')
+            os.system(f'python {dir}')
             os.chdir(old_dir)
 
 
@@ -41,7 +41,7 @@ def start():
             name_script = re.search('', scripts)
             name_script = scripts.split('\\')[7]
             run_scripts(scripts, name_script, old_dir)
-        os.system('python3 lerjson.py')
+        os.system('python lerjson.py')
         sleep(420)
 
 start()
