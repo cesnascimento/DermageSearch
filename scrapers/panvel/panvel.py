@@ -37,7 +37,7 @@ def informacao_produto(infos):
         panvel = panvel_session.get(
             f'https://www.panvel.com/api/v2/catalog/{panvel_code}?uf=RS', cookies=cookies, headers=headers).json()
         ean, preco, link = panvel['ean'], locale.currency(
-            panvel['discount']['dealPrice']), f'''https://https://www.panvel.com/{panvel['link']}'''
+            panvel['discount']['dealPrice']), f'''https://www.panvel.com/{panvel['link']}'''
         DICIO['precos'].append(
             {'id': str(ULID()), 'ean_id': ean, 'loja_id': 10, 'preco': preco, 'link': link, 'datahora': data_hora()})
     
