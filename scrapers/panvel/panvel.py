@@ -32,16 +32,23 @@ def informacao_produto(infos):
     DICIO['lojas'] = [
         {'id': 10, 'nome': 'Panvel', 'site': 'https://www.panvel.com'}]
     for info in infos:
-        print(info)
         panvel_code = info['panvelCode']
         panvel = panvel_session.get(
             f'https://www.panvel.com/api/v2/catalog/{panvel_code}?uf=RS', cookies=cookies, headers=headers).json()
         ean, preco, link = panvel['ean'], locale.currency(
-            panvel['discount']['dealPrice']), f'''https://www.panvel.com/{panvel['link']}'''
+            panvel['discount']['dealPrice']), f'''https://www.panvel.com{panvel['link']}'''
         DICIO['precos'].append(
             {'id': str(ULID()), 'ean_id': ean, 'loja_id': 10, 'preco': preco, 'link': link, 'datahora': data_hora()})
-    
+
     return DICIO
+
+
+def values_duplicate(DICIO):
+    DICIO2 = {}
+    for key, value in DICIO.items():
+        if key not in DICIO2:
+            DICIO2[key] = value
+    return DICIO2
 
 
 def criar_json(info):
@@ -50,7 +57,7 @@ def criar_json(info):
 
 
 def start():
-    criar_json(informacao_produto(navegar_panvel(requisicao_panvel())))
+    criar_json(values_duplicate(informacao_produto(navegar_panvel(requisicao_panvel()))))
 
 
 start()

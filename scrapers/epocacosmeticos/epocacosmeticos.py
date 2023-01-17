@@ -1,5 +1,6 @@
 import requests
 import json
+import locale
 import re
 from datetime import datetime
 from ulid import ULID
@@ -9,6 +10,7 @@ from bs4 import BeautifulSoup
 
 epocacosmeticos_session = requests.Session()
 DICIO = {}
+locale.setlocale(locale.LC_MONETARY, '')
 
 
 def requisicao_epocacosmeticos():
@@ -41,7 +43,8 @@ def navegar_produtos(links):
         soup = BeautifulSoup(epocacosmeticos.text, 'html.parser')
         try:
             ean = soup.find('label', 'sku-ean-code').getText()
-            preco = soup.find('strong', 'skuBestPrice').getText()
+            preco = soup.find('strong', 'skuBestPrice').getText().replace(',', '.')
+            preco = locale.currency(float(re.sub('[R$]', '', preco)))
             DICIO['precos'].append(
                 {'id': str(ULID()), 'ean_id': ean, 'loja_id': 2, 'preco': preco, 'link': link, 'datahora': data_hora()})
         except:
