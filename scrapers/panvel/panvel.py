@@ -44,11 +44,15 @@ def informacao_produto(infos):
 
 
 def values_duplicate(DICIO):
-    DICIO2 = {}
+    resultado = []
+
     for key, value in DICIO.items():
-        if key not in DICIO2:
-            DICIO2[key] = value
-    return DICIO2
+        if value in resultado:
+            del DICIO[key]
+        else:
+            resultado.append(value)
+    
+    return DICIO
 
 
 def criar_json(info):
@@ -57,7 +61,8 @@ def criar_json(info):
 
 
 def start():
-    criar_json(values_duplicate(informacao_produto(navegar_panvel(requisicao_panvel()))))
+    criar_json(values_duplicate(informacao_produto(
+        navegar_panvel(requisicao_panvel()))))
 
 
 start()
