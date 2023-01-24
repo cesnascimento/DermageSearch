@@ -4,13 +4,13 @@ import json
 import locale
 from ulid import ULID
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from bs4 import BeautifulSoup
 from headers_dermage import mount_payload, paginas_categorias
 
 
 dermage_session = requests.Session()
-lista_skus = list()
+lista_skus = dict()
 DICIO = {}
 locale.setlocale(locale.LC_MONETARY, '')
 
@@ -21,10 +21,11 @@ def requisicao_dermage(categoria, num_paginas):
         soup = BeautifulSoup(dermage.text, 'html.parser')
         buscar_skus = [x['data-id']
                        for x in soup.find_all('span', 'skuProd')]
-        with ThreadPoolExecutor(max_workers=50) as executor:
-            for skus in buscar_skus:
-                 executor.map(lista_skus.append(skus))
-    return list(set(lista_skus))
+        buscar_url = [x['href']
+                      for x in soup.find_all('a', 'x-shelf-product__link')]
+        for skus, url in zip(buscar_skus, buscar_url):
+            lista_skus.update({skus: url})
+    return lista_skus
 
 
 def paginas_in_categorias(nome_categoria):
@@ -44,18 +45,26 @@ def informacoes_produtos(lista_skus):
     DICIO['produtos'], DICIO['precos'] = [], []
     DICIO['lojas'] = [
         {'id': 1, 'nome': 'Dermage', 'site': 'htttps://www.dermage.com.br'}]
-    for codigo_sku in lista_skus:
-        produtos = dermage_session.get(
-            f'https://www.dermage.com.br/produto/sku/{codigo_sku}').json()
-        for produto in produtos:
-            if re.search('789538', produto['Ean']):
-                ean, nome, preco = produto['Ean'], produto['Name'], locale.currency(
-                    produto['SkuSellersInformation'][0]['Price'])
-                DICIO['produtos'].append(
-                    {'nome': nome, 'ean': ean})
-                DICIO['precos'].append(
-                    {'id': str(ULID()), 'ean_id': ean, 'loja_id': 1, 'preco': preco, 'datahora': data_hora()})
+    with ThreadPoolExecutor(max_workers=50) as executor:
+        future_to_sku = {executor.submit(get_product_info, sku, url): sku for sku, url in lista_skus.items()}
+        for future in as_completed(future_to_sku):
+            sku = future_to_sku[future]
+            try:
+                ean, nome, preco, url = future.result()
+                DICIO['produtos'].append({'nome': nome, 'ean': ean})
+                DICIO['precos'].append({'id': str(ULID()), 'ean_id': ean, 'loja_id': 1, 'preco': preco, 'link': url, 'datahora': data_hora()})
+            except Exception as exc:
+                pass
     return DICIO
+
+def get_product_info(sku, url):
+    produtos = dermage_session.get(
+        f'https://www.dermage.com.br/produto/sku/{sku}').json()
+    for produto in produtos:
+        if re.search('789538', produto['Ean']):
+            ean, nome, preco = produto['Ean'], produto['Name'], locale.currency(
+                produto['SkuSellersInformation'][0]['Price'])
+            return ean, nome, preco, url
 
 
 def criar_json(info):
@@ -64,11 +73,9 @@ def criar_json(info):
 
 
 def start():
-    with ThreadPoolExecutor(max_workers=50) as executor:
-        for categoria in paginas_categorias.keys():
-            num_paginas = paginas_in_categorias(categoria)
-            executor.map(criar_json(informacoes_produtos(
-                requisicao_dermage(categoria, num_paginas))))
-
+    for categoria in paginas_categorias.keys():
+        num_paginas = paginas_in_categorias(categoria)
+        criar_json(informacoes_produtos(
+            requisicao_dermage(categoria, num_paginas)))
 
 start()
