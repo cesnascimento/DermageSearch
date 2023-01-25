@@ -25,6 +25,7 @@ def get_json_geral(files):
 
 
 def alert_price(dermage, files):
+    data_list = []
     for json_file in files:
         with open(f'{json_file}', 'r') as file:
             for f in file:
@@ -38,9 +39,16 @@ def alert_price(dermage, files):
                                 try:
                                     difference = abs(float(a) - float(b))
                                     percent = (difference / float(b)) * 100
-                                    send_email_alert(name['nome'], price_file['link'], b, "{:.1f}%".format(percent))
+                                    data = {
+                                        'name': name['nome'],
+                                        'link': price_file['link'],
+                                        'price_file': b,
+                                        'percent': "{:.1f}%".format(percent)
+                                    }
+                                    data_list.append(data)
                                 except:
                                     pass
+    send_email_alert(data_list)
 
 
 def refresh_token():
@@ -60,24 +68,22 @@ def refresh_token():
     print("Outlook autenticado.")
     return account
 
-def send_email_alert(produto, loja, valor, porcentagem):
-    loja2 = loja.split('.')[1]
+def send_email_alert(data_list):
     account = refresh_token()
     if account.is_authenticated == True:
         m = account.new_message()
         m.to.add('cowlfnt@gmail.com')
-        m.subject = f'Alerta de preço – {loja2} / R${valor} / {porcentagem}'
-        body = f"""
-            <html>
-                <body>
-                    <center><h1>Relatório do Robô Dermage Product Search</h1></center>
-                    <p>Produtos: {produto}</p>
-                    <p>Loja: {loja2}</p>
-                    <p>Link: {loja}</p>
-                    <p>Valor: R${valor}</p>
-                    <p>Porcentagem: {porcentagem}</p>
-                </body>
-            </html>"""
+        m.subject = f'Alerta de preço'
+        body = f'<html><body><center><h1>Relatório do Robô Dermage Product Search</h1></center>'
+        for data in data_list:
+            body += f'<p>Produtos: {data["name"]}</p>'
+            body += f'<p>Loja: {data["link"].split(".")[1]}</p>'
+            body += f'<p>Link: {data["link"]}</p>'
+            body += f'<p>Valor: R${data["price_file"]}</p>'
+            body += f'<p>Porcentagem: {data["percent"]}</p>'
+            body += f'--------------------------------------------------------------------------'
+            body += f'<br/>'
+        body += '</body></html>'
         m.body = body
         m.send()
         print('Email Enviado')
