@@ -37,13 +37,12 @@ def alert_price(dermage, files):
                             a,b = price_dermage['preco'].replace('R$','').replace(',', '.'), price_file['preco'].replace('R$','').replace(',', '.')
                             if abs(float(a) - (float(a) * 0.15)) >= float(b):
                                 try:
-                                    difference = abs(float(a) - float(b))
-                                    percent = (difference / float(b)) * 100
+                                    percent = (abs(float(a) - float(b))) / abs(float(b)) * 100
                                     data = {
                                         'name': name['nome'],
                                         'link': price_file['link'],
                                         'price_file': b,
-                                        'percent': "{:.1f}%".format(percent)
+                                        'percent': "{:.2f}%".format(percent)
                                     }
                                     data_list.append(data)
                                 except:
