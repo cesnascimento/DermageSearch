@@ -17,7 +17,6 @@ import {
 import { Link } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
-import axios from 'axios'
 import * as XLSX from 'xlsx';
 
 
@@ -47,14 +46,7 @@ function ListaProdutos() {
     }
 
     function mostrarDetalhesDoProduto(produto) {
-        /* setProdutoSelecionado(produto) */
-
         let produtosEncontrados = precos.filter(preco => preco.ean_id === produto.ean)
-
-        console.log('encontrados',produtosEncontrados)
-
-        console.log('produto2',produto)
-
         let dadosDoProduto = produtosEncontrados.map(p => {
             let nomeDaLoja = lojas.find(loja => loja.id === p.loja_id)
             return {
@@ -67,13 +59,9 @@ function ListaProdutos() {
                 loja: nomeDaLoja.nome
             }
         })
-        console.log('dados', dadosDoProduto.flat(2))
-
-        /* console.log('dados', dadosDoProduto.flat(2)) */
 
         setDadosDoProdutoEncontrado(dadosDoProdutoEncontrado => [...dadosDoProdutoEncontrado, dadosDoProduto])
     }
-    console.log(dadosDoProdutoEncontrado.flat(2))
 
     function exportToExcel(tableData, fileName) {
         const worksheet = XLSX.utils.json_to_sheet(tableData);
@@ -109,9 +97,11 @@ function ListaProdutos() {
                         </Input>
                     </InputGroup>
                     <TableContainer>
-                        <Button onClick={() => exportToExcel(dadosDoProdutoEncontrado.flat(2), 'produtos')}>
-                            Exportar para Excel
-                        </Button>
+                        <Center>
+                            <Button colorScheme='blue' margin='5' onClick={() => exportToExcel(dadosDoProdutoEncontrado.flat(2), 'produtos')}>
+                                Exportar para Excel
+                            </Button>
+                        </Center>
 
                         <Table variant='unstyled'>
                             <Center>
@@ -127,7 +117,7 @@ function ListaProdutos() {
                                         } else if (data.nome.toLocaleLowerCase().includes(searchTerm.toLocaleLowerCase())) {
                                             return data
                                         }
-                                    }).map(produto => (
+                                    }).sort((a, b) => a.nome.localeCompare(b.nome)).map(produto => (
                                         <Tbody>
                                             <AccordionItem sx={{ border: 'transparent', position: 'relative', width: '100%' }}>
                                                 <Tr sx={{ display: 'flex', justifyContent: 'space-between' }}>
