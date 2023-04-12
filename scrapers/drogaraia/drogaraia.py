@@ -68,18 +68,24 @@ def informacoes_produtos(produtos):
     DICIO['precos'] = []
     DICIO['lojas'] = [
         {'id': 5, 'nome': 'Drogaraia', 'site': 'https://www.drogaraia.com.br/'}]
-    for produto in produtos:
-        nome = produto['name']
-        ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
-        try:
-            market, preco = get_name_marketplace(link)
-            preco = locale.currency(float(preco))
-            print(nome, ean, link, preco)
-            DICIO['precos'].append(
-                {'id': str(ULID()), 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
-        except:
-            pass
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        futures = []
+        for produto in produtos:
+            nome = produto['name']
+            ean, link = produto['ean'], produto['urlKey'].replace('//', 'https://')
+            futures.append(executor.submit(get_name_marketplace, link))
+        for idx, future in enumerate(futures):
+            try:
+                market, preco = future.result()
+                preco = locale.currency(float(preco))
+                produto = produtos[idx]
+                nome, ean, link = produto['name'], produto['ean'], produto['urlKey'].replace('//', 'https://')
+                DICIO['precos'].append(
+                    {'id': str(ULID()), 'ean_id': ean, 'loja_id': 5, 'preco': preco, 'link': link, 'datahora': data_hora(), 'market': f'{market}'})
+            except:
+                pass
     return DICIO
+
 
 
 def criar_json(info):

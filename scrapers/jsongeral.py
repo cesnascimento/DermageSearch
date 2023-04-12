@@ -35,13 +35,11 @@ def run_scripts(dirs, name_script, old_dir):
 
 def start():
     old_dir = os.getcwd()
-    while True:
-        folders_scripts = open_folder_scripts()
-        for scripts in folders_scripts:
-            name_script = re.search('', scripts)
-            name_script = scripts.split('\\')[7]
-            run_scripts(scripts, name_script, old_dir)
-        os.system('python lerjson.py')
-        sleep(420)
+    folders_scripts = open_folder_scripts()
+    for scripts in folders_scripts:
+        name_script = re.search('', scripts)
+        name_script = scripts.split('/')[5]
+        run_scripts(scripts, name_script, old_dir)
+    os.system('python lerjson.py')
 
 start()
