@@ -18,7 +18,7 @@ import { Link } from '@chakra-ui/react'
 import { Button } from '@chakra-ui/react'
 import { BsSearch } from 'react-icons/bs'
 import axios from 'axios'
-/* import data from '../../public/json/geral.json' */
+import * as XLSX from 'xlsx';
 
 
 function ListaProdutos() {
@@ -26,13 +26,8 @@ function ListaProdutos() {
 
     const [ProdutoSelecionado, setProdutoSelecionado] = useState(null)
     const [dadosDoProduto, setDadosDoProduto] = useState(null)
+    const [dadosDoProdutoEncontrado, setDadosDoProdutoEncontrado] = useState([])
     const [data, setData] = useState(null);
-
-    useEffect(() => {
-        fetch('json/geral.json')
-            .then(response => response.json())
-            .then(json => setData(json))
-    }, []);
 
     const produtos = data?.produtos
     const precos = data?.precos
@@ -51,6 +46,56 @@ function ListaProdutos() {
         return nomeDaLoja;
     }
 
+    function mostrarDetalhesDoProduto(produto) {
+        /* setProdutoSelecionado(produto) */
+
+        let produtosEncontrados = precos.filter(preco => preco.ean_id === produto.ean)
+
+        console.log('encontrados',produtosEncontrados)
+
+        console.log('produto2',produto)
+
+        let dadosDoProduto = produtosEncontrados.map(p => {
+            let nomeDaLoja = lojas.find(loja => loja.id === p.loja_id)
+            return {
+                nome: produto.nome,
+                ean_id: p.ean_id,
+                preco: p.preco,
+                link: p?.link,
+                market: p?.market,
+                datahora: p.datahora,
+                loja: nomeDaLoja.nome
+            }
+        })
+        console.log('dados', dadosDoProduto.flat(2))
+
+        /* console.log('dados', dadosDoProduto.flat(2)) */
+
+        setDadosDoProdutoEncontrado(dadosDoProdutoEncontrado => [...dadosDoProdutoEncontrado, dadosDoProduto])
+    }
+    console.log(dadosDoProdutoEncontrado.flat(2))
+
+    function exportToExcel(tableData, fileName) {
+        const worksheet = XLSX.utils.json_to_sheet(tableData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Sheet1');
+        XLSX.writeFile(workbook, fileName + '.xlsx');
+    }
+
+    useEffect(() => {
+        fetch('json/geral.json')
+            .then(response => response.json())
+            .then(json => setData(json))
+    }, []);
+    useEffect(() => {
+        if (produtos) {
+            produtos.forEach(element => {
+                mostrarDetalhesDoProduto(element)
+            });
+        }
+    }, [produtos]);
+
+
     return (
         <>
             <Center>
@@ -64,6 +109,10 @@ function ListaProdutos() {
                         </Input>
                     </InputGroup>
                     <TableContainer>
+                        <Button onClick={() => exportToExcel(dadosDoProdutoEncontrado.flat(2), 'produtos')}>
+                            Exportar para Excel
+                        </Button>
+
                         <Table variant='unstyled'>
                             <Center>
                                 <Accordion allowToggle>
